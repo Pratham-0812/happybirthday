@@ -306,21 +306,38 @@ function FreezePhase({ onDone }: { onDone: () => void }) {
 function RevealPhase({ onDone }: { onDone: () => void }) {
   const [step, setStep] = useState(0);
   useEffect(() => {
-    const ts = [setTimeout(() => setStep(1), 400), setTimeout(() => setStep(2), 2000), setTimeout(onDone, 7500)];
+    const ts = [
+      setTimeout(() => setStep(1), 400),
+      setTimeout(() => setStep(2), 1800),
+      setTimeout(() => setStep(3), 3400),
+    ];
     return () => ts.forEach(clearTimeout);
   }, [onDone]);
   return (
-    <div className="bd-phase">
-      <div style={{ opacity: step >= 1 ? 1 : 0, transform: step >= 1 ? "scale(1)" : "scale(0.4)", transition: "all 1s cubic-bezier(0.34,1.56,0.64,1)" }}>
-        <KuromiImg idx={2} size={170} animate />
-        <h1 className="bd-birthday-title">HAPPY BIRTHDAY!</h1>
+    <div className="bd-phase bd-reveal-phase">
+      {/* Title */}
+      <div className="bd-reveal-top" style={{ opacity: step >= 1 ? 1 : 0, transform: step >= 1 ? "translateY(0)" : "translateY(-30px)", transition: "all 1s ease" }}>
+        <h1 className="bd-birthday-title">HAPPY BIRTHDAY</h1>
         <h1 className="bd-birthday-sub">{HER_NAME} 🎀</h1>
       </div>
-      <div className="bd-reveal-lines" style={{ opacity: step >= 2 ? 1 : 0, transform: step >= 2 ? "translateY(0)" : "translateY(30px)", transition: "all 1s ease 0.4s" }}>
-        <p className="bd-reveal-line">The day you were born, something in the world shifted —</p>
-        <p className="bd-reveal-line bd-purple">it became warmer, brighter, and infinitely more beautiful. 💜</p>
+
+      {/* Amna's photo — center */}
+      <div className="bd-reveal-photo-wrap" style={{ opacity: step >= 1 ? 1 : 0, transform: step >= 1 ? "scale(1)" : "scale(0.4)", transition: "all 1.1s cubic-bezier(0.34,1.56,0.64,1) 0.2s" }}>
+        <div className="bd-reveal-photo-glow" />
+        <img src="/amna.jpg" alt={HER_NAME} className="bd-reveal-photo" draggable={false} />
+        <div className="bd-reveal-photo-ring" />
       </div>
-      {step >= 2 && <button className="bd-btn bd-btn-outline" onClick={onDone}>Continue ♡</button>}
+
+      {/* Emotional message */}
+      <div className="bd-reveal-emotional" style={{ opacity: step >= 2 ? 1 : 0, transform: step >= 2 ? "translateY(0)" : "translateY(25px)", transition: "all 1.1s ease" }}>
+        <p className="bd-reveal-line">I have looked at a thousand sunsets and a million stars,</p>
+        <p className="bd-reveal-line">but nothing — nothing — has ever stolen my breath</p>
+        <p className="bd-reveal-line bd-purple">the way you do, simply by existing. 💜</p>
+      </div>
+
+      {step >= 3 && (
+        <button className="bd-btn bd-btn-outline bd-fade-in" onClick={onDone}>Read my letter to you ♡</button>
+      )}
     </div>
   );
 }
