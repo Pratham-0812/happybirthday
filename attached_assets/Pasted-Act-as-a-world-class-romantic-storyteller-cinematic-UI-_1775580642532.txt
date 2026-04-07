@@ -1,0 +1,208 @@
+Act as a world-class romantic storyteller, cinematic UI/UX designer, and senior frontend developer.
+
+Your goal is NOT just to build a website — but to create an emotional experience that makes someone feel deeply loved, special, and unforgettable.
+
+This is a Kurumi Tokisaki-inspired birthday website for my girlfriend’s 18th birthday.
+
+THE CORE EMOTION:
+This website should feel like:
+
+* “I waited for you across time”
+* “You changed my life”
+* “You are my forever”
+
+It must feel personal, intimate, and emotional — like a digital love letter brought to life.
+
+---
+
+🌹 VISUAL & THEME DIRECTION:
+
+* Inspired by Kurumi Tokisaki (Date A Live)
+* Deep red, black, soft glowing gold
+* Romantic darkness (not scary, but intense love)
+* Clock / time / destiny symbolism
+* Floating particles like memories drifting in time
+
+---
+
+🎬 STORY-DRIVEN EXPERIENCE FLOW:
+
+1. 🌑 OPENING (EMOTIONAL HOOK)
+
+* Black screen, soft heartbeat + ticking clock
+* Slowly fading text (typewriter style):
+  “In a world full of moments…”
+  “There was one moment…”
+  “That changed everything…”
+* A glowing red eye appears (Kurumi style)
+* Whisper text:
+  “The moment I found you…”
+
+Transition slowly.
+
+---
+
+2. ⏳ COUNTDOWN (BUILDING EMOTION)
+
+* Beautiful animated countdown timer
+
+* Message above:
+  “I counted every second… just to celebrate you.”
+
+* Subtext:
+  “Because you are worth every moment of my life.”
+
+* Add soft piano + ticking sound
+
+* Background: rotating clock gears, floating red petals
+
+---
+
+3. 💔 TIME FREEZE (TRANSITION)
+
+* When countdown ends:
+
+  * Everything freezes
+  * Sound cuts out for 1 second
+  * Screen cracks like time breaking
+* Text appears:
+  “And now… time belongs to you.”
+
+---
+
+4. 🎉 BIRTHDAY REVEAL (EMOTIONAL PEAK)
+
+* Explosion of soft particles, hearts, light
+
+* Graffiti-style animation:
+  “HAPPY 18TH BIRTHDAY, MY LOVE ❤️”
+
+* Followed by a soft romantic line:
+  “Today isn’t just your birthday…”
+  “It’s the day the world became more beautiful.”
+
+---
+
+5. 💌 LOVE LETTER SECTION (CORE HEART)
+
+* Typewriter effect, slow and emotional:
+
+  “I don’t know how to explain what you are to me…”
+  “But somehow… everything feels right when you’re here.”
+  “You are my peace… my chaos… my home…”
+  “And if I had to live my life again…”
+  “I would find you… every single time.”
+
+* Add blinking cursor effect for realism
+
+---
+
+6. 🎁 INTERACTIVE LOVE MOMENTS:
+
+A. “Open Your Gift 💝”
+
+* Opens a hidden message:
+  “You are the best thing that ever happened to me.”
+
+B. “Our Memories 📸”
+
+* Smooth slider gallery (placeholders)
+* Soft fade transitions
+
+C. “Do you love me? ❤️”
+
+* Cute playful interaction:
+
+  * YES button grows
+  * NO button runs away
+
+---
+
+7. 🕰️ KURUMI TIME DIAL (UNIQUE FEATURE)
+
+* Interactive clock dial
+* Each rotation reveals:
+
+  * A memory
+  * A compliment
+  * A promise
+
+Examples:
+
+* “The first time I smiled because of you…”
+* “The way you make everything better…”
+* “I promise to always stay…”
+
+---
+
+8. 🌌 FINAL MOMENT (DEEP EMOTIONAL CLOSE)
+
+* Everything slows down
+
+* Soft glowing text:
+
+  “In every timeline…”
+  “In every universe…”
+  “I would still choose you…”
+
+  “Happy 18th Birthday ❤️”
+
+* Floating hearts fade into darkness
+
+---
+
+🎨 DESIGN REQUIREMENTS:
+
+* Cinematic transitions (slow, smooth, emotional pacing)
+* Glassmorphism + glow effects
+* Soft blur backgrounds
+* Elegant romantic fonts
+* Cursor glow / particle interaction
+* Mobile-first responsive design
+
+---
+
+🎶 AUDIO DESIGN:
+
+* Soft piano music (loop)
+* Clock ticking in background
+* Heartbeat at beginning
+* Soft chime at reveal moment
+
+---
+
+💡 EXTRA FEATURES (ADD CREATIVELY):
+
+* Cursor leaves glowing trail
+* Hidden secret message (Easter egg)
+* Subtle breathing animation on elements
+* Light parallax effect
+
+---
+
+⚠️ IMPORTANT:
+
+* This should NOT feel like a normal website
+* It should feel like a MEMORY + LOVE STORY
+* Focus on EMOTION over complexity
+* Every animation must have meaning
+
+---
+
+📦 OUTPUT:
+
+* Full working code (HTML/CSS/JS or React)
+* Clean, structured, well-commented
+* Easy placeholders to replace:
+
+  * Her name
+  * Photos
+  * Personal messages
+
+---
+
+FINAL GOAL:
+When she opens this…
+She should smile, feel loved, and maybe even tear up.
+
+Make it unforgettable.
