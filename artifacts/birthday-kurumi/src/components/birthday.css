@@ -57,14 +57,32 @@
   overflow-y: auto;
 }
 
-/* ── Kuromi character ── */
-.bd-kuromi-wrap { display: flex; align-items: center; justify-content: center; }
+/* ── Kuromi image ── */
+.bd-kuromi-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 18px rgba(180,100,255,0.45));
+}
+.bd-kuromi-img {
+  user-select: none;
+  pointer-events: none;
+}
 @keyframes bd-bounce {
   0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+  50%      { transform: translateY(-12px); }
 }
-.bd-kuromi-bounce { animation: bd-bounce 2s ease-in-out infinite; }
-.bd-kuromi-pop { transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.bd-kuromi-bounce { animation: bd-bounce 2.2s ease-in-out infinite; }
+.bd-img-pop { transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* ── Love question ── */
+.bd-love-question {
+  font-size: 0.95rem;
+  color: #cc99ff;
+  font-weight: 600;
+  margin: 0;
+}
 
 /* ── Opening ── */
 .bd-opening-text-wrap { margin-top: 1rem; }

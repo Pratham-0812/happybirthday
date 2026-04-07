@@ -16,6 +16,13 @@ type Phase =
 const BIRTHDAY = new Date("2026-04-07T00:00:00");
 const HER_NAME = "Amna";
 
+// ─── Kuromi images (real) ─────────────────────────────────────────────────────
+const KUROMI_IMGS = [
+  "/kuromi1.webp",
+  "/karomi2.webp",
+  "/kuromi3.webp",
+];
+
 // ─── Countdown Logic ──────────────────────────────────────────────────────────
 function getTimeLeft() {
   const now = new Date();
@@ -31,7 +38,7 @@ function getTimeLeft() {
 }
 
 // ─── Typewriter Hook ──────────────────────────────────────────────────────────
-function useTypewriter(text: string, speed = 45, active = true) {
+function useTypewriter(text: string, speed = 48, active = true) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
   useEffect(() => {
@@ -61,18 +68,18 @@ function ParticleCanvas({ phase }: { phase: Phase }) {
     window.addEventListener("resize", resize);
     const isCelebration = phase === "reveal" || phase === "finale";
     const colors = isCelebration
-      ? ["#cc88ff", "#ff88dd", "#ffffff", "#ffaaff", "#aa66ff", "#ffccff"]
-      : ["#9955cc", "#cc77ee", "#ffffff", "#7733aa", "#ffaaee"];
-    const count = isCelebration ? 90 : 45;
+      ? ["#cc88ff", "#ff88dd", "#ffffff", "#ffaaff", "#aa66ff", "#ffccff", "#ffb3e6"]
+      : ["#9955cc", "#cc77ee", "#ffffff", "#7733aa", "#ffaaee", "#e0b0ff"];
+    const count = isCelebration ? 100 : 50;
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * (canvas?.width ?? 800),
       y: Math.random() * (canvas?.height ?? 600),
       vx: (Math.random() - 0.5) * (isCelebration ? 1.6 : 0.5),
-      vy: -Math.random() * (isCelebration ? 2 : 0.7) - 0.2,
-      size: Math.random() * (isCelebration ? 10 : 5) + 2,
+      vy: -Math.random() * (isCelebration ? 2.2 : 0.8) - 0.2,
+      size: Math.random() * (isCelebration ? 12 : 6) + 2,
       alpha: Math.random() * 0.8 + 0.2,
       color: colors[Math.floor(Math.random() * colors.length)]!,
-      type: Math.floor(Math.random() * 3), // 0=circle, 1=star, 2=heart
+      type: Math.floor(Math.random() * 3),
     }));
     let raf: number;
     function drawStar(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
@@ -83,8 +90,7 @@ function ParticleCanvas({ phase }: { phase: Phase }) {
         ctx.lineTo(x + r * Math.cos(a), y + r * Math.sin(a));
         ctx.lineTo(x + (r / 2) * Math.cos(b), y + (r / 2) * Math.sin(b));
       }
-      ctx.closePath();
-      ctx.fill();
+      ctx.closePath(); ctx.fill();
     }
     function drawHeart(ctx: CanvasRenderingContext2D, x: number, y: number, s: number) {
       ctx.beginPath();
@@ -99,19 +105,13 @@ function ParticleCanvas({ phase }: { phase: Phase }) {
       if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const p of particles) {
-        ctx.save();
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
+        ctx.save(); ctx.globalAlpha = p.alpha; ctx.fillStyle = p.color;
         if (p.type === 1) drawStar(ctx, p.x, p.y, p.size);
         else if (p.type === 2) drawHeart(ctx, p.x, p.y, p.size / 2);
         else { ctx.beginPath(); ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2); ctx.fill(); }
         ctx.restore();
-        p.x += p.vx; p.y += p.vy; p.alpha -= 0.0012;
-        if (p.alpha <= 0) {
-          p.x = Math.random() * canvas.width;
-          p.y = canvas.height + 20;
-          p.alpha = Math.random() * 0.8 + 0.2;
-        }
+        p.x += p.vx; p.y += p.vy; p.alpha -= 0.001;
+        if (p.alpha <= 0) { p.x = Math.random() * canvas.width; p.y = canvas.height + 20; p.alpha = Math.random() * 0.8 + 0.2; }
       }
       raf = requestAnimationFrame(draw);
     }
@@ -133,10 +133,7 @@ function CursorTrail() {
     const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
     resize();
     window.addEventListener("resize", resize);
-    const onMove = (e: MouseEvent) => {
-      trailRef.current.push({ x: e.clientX, y: e.clientY, alpha: 1 });
-      if (trailRef.current.length > 28) trailRef.current.shift();
-    };
+    const onMove = (e: MouseEvent) => { trailRef.current.push({ x: e.clientX, y: e.clientY, alpha: 1 }); if (trailRef.current.length > 28) trailRef.current.shift(); };
     window.addEventListener("mousemove", onMove);
     let raf: number;
     function draw() {
@@ -146,16 +143,11 @@ function CursorTrail() {
         const p = trailRef.current[i]!;
         const t = i / trailRef.current.length;
         const size = t * 10 + 1;
-        ctx.save();
-        ctx.globalAlpha = p.alpha * t;
+        ctx.save(); ctx.globalAlpha = p.alpha * t;
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 2);
-        grad.addColorStop(0, "#cc66ff");
-        grad.addColorStop(0.5, "#ff88cc");
-        grad.addColorStop(1, "transparent");
+        grad.addColorStop(0, "#cc66ff"); grad.addColorStop(0.5, "#ff88cc"); grad.addColorStop(1, "transparent");
         ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size * 2, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, size * 2, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
         p.alpha -= 0.045;
       }
@@ -168,124 +160,83 @@ function CursorTrail() {
   return <canvas ref={canvasRef} className="bd-cursor-trail" />;
 }
 
-// ─── Kuromi SVG Character ──────────────────────────────────────────────────────
-function KuromiCharacter({ size = 220, animate = false }: { size?: number; animate?: boolean }) {
+// ─── Kuromi Image Component ───────────────────────────────────────────────────
+function KuromiImg({ idx = 0, size = 200, animate = false }: { idx?: number; size?: number; animate?: boolean }) {
   return (
-    <div className={`bd-kuromi-wrap ${animate ? "bd-kuromi-bounce" : ""}`} style={{ width: size, height: size * 1.1 }}>
-      <svg width={size} height={size * 1.1} viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Body */}
-        <ellipse cx="100" cy="175" rx="52" ry="38" fill="#ffffff" />
-        {/* Arms */}
-        <ellipse cx="52" cy="168" rx="18" ry="11" fill="#ffffff" transform="rotate(-20 52 168)" />
-        <ellipse cx="148" cy="168" rx="18" ry="11" fill="#ffffff" transform="rotate(20 148 168)" />
-        {/* Legs */}
-        <ellipse cx="82" cy="207" rx="13" ry="8" fill="#ffffff" />
-        <ellipse cx="118" cy="207" rx="13" ry="8" fill="#ffffff" />
-        {/* Head */}
-        <ellipse cx="100" cy="105" rx="58" ry="54" fill="#ffffff" />
-        {/* Jester hat — main black */}
-        <path d="M42,90 Q45,30 100,18 Q155,30 158,90 Q130,75 100,72 Q70,75 42,90 Z" fill="#1a0030" />
-        {/* Hat left flap */}
-        <path d="M42,90 Q35,55 58,30 Q65,68 85,78 Q62,80 42,90 Z" fill="#1a0030" />
-        {/* Hat right flap */}
-        <path d="M158,90 Q165,55 142,30 Q135,68 115,78 Q138,80 158,90 Z" fill="#1a0030" />
-        {/* Hat top ball */}
-        <circle cx="100" cy="15" r="12" fill="#1a0030" />
-        {/* Pink skull on hat */}
-        <ellipse cx="100" cy="52" rx="13" ry="11" fill="#ff88cc" />
-        <ellipse cx="100" cy="59" rx="8" ry="5" fill="#ff88cc" />
-        <circle cx="96" cy="51" r="2.5" fill="#1a0030" />
-        <circle cx="104" cy="51" r="2.5" fill="#1a0030" />
-        <path d="M97,58 L100,55 L103,58" stroke="#1a0030" strokeWidth="1" fill="none" />
-        {/* Ears (small bunny ears under hat) */}
-        <ellipse cx="68" cy="78" rx="8" ry="14" fill="#1a0030" />
-        <ellipse cx="132" cy="78" rx="8" ry="14" fill="#1a0030" />
-        {/* Face — eyes */}
-        <ellipse cx="84" cy="108" rx="11" ry="12" fill="#1a0030" />
-        <ellipse cx="116" cy="108" rx="11" ry="12" fill="#1a0030" />
-        <circle cx="87" cy="105" r="3.5" fill="#ffffff" />
-        <circle cx="119" cy="105" r="3.5" fill="#ffffff" />
-        {/* Nose */}
-        <ellipse cx="100" cy="120" rx="4" ry="3" fill="#ff88cc" />
-        {/* Smile */}
-        <path d="M88,128 Q100,138 112,128" stroke="#1a0030" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-        {/* Cheeks */}
-        <ellipse cx="74" cy="122" rx="9" ry="6" fill="#ffb3e0" opacity="0.6" />
-        <ellipse cx="126" cy="122" rx="9" ry="6" fill="#ffb3e0" opacity="0.6" />
-        {/* Collar bow */}
-        <path d="M88,148 L100,155 L112,148 L100,143 Z" fill="#cc44cc" />
-        <circle cx="100" cy="150" r="4" fill="#ff88cc" />
-        {/* Body outline */}
-        <ellipse cx="100" cy="175" rx="52" ry="38" stroke="#e0d0ff" strokeWidth="1.5" fill="none" />
-        {/* Stars around */}
-        <text x="20" y="90" fontSize="14" fill="#cc88ff" opacity="0.8">✦</text>
-        <text x="168" y="85" fontSize="12" fill="#ff88dd" opacity="0.8">✦</text>
-        <text x="30" y="140" fontSize="10" fill="#ffccff" opacity="0.7">⋆</text>
-        <text x="162" y="145" fontSize="10" fill="#cc88ff" opacity="0.7">⋆</text>
-      </svg>
+    <div className={`bd-kuromi-frame ${animate ? "bd-kuromi-bounce" : ""}`} style={{ width: size, height: size }}>
+      <img
+        src={KUROMI_IMGS[idx % KUROMI_IMGS.length]}
+        alt="Kuromi"
+        className="bd-kuromi-img"
+        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        draggable={false}
+      />
     </div>
   );
 }
 
 // ─── Star background ──────────────────────────────────────────────────────────
+const STARS = Array.from({ length: 35 }, (_, i) => ({
+  left: `${(i * 37 + 11) % 100}%`,
+  top: `${(i * 53 + 7) % 100}%`,
+  width: `${(i % 3) + 1}px`,
+  height: `${(i % 3) + 1}px`,
+  animationDelay: `${(i * 0.4) % 4}s`,
+  animationDuration: `${((i * 0.7) % 3) + 2}s`,
+}));
+
 function StarBg() {
   return (
     <div className="bd-star-bg">
-      {Array.from({ length: 30 }).map((_, i) => (
-        <div
-          key={i}
-          className="bd-star"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            width: `${Math.random() * 3 + 1}px`,
-            height: `${Math.random() * 3 + 1}px`,
-            animationDelay: `${Math.random() * 4}s`,
-            animationDuration: `${Math.random() * 3 + 2}s`,
-          }}
-        />
-      ))}
+      {STARS.map((s, i) => <div key={i} className="bd-star" style={s} />)}
     </div>
   );
 }
 
 // ─── Opening Phase ────────────────────────────────────────────────────────────
 const openingLines = [
-  "Once upon a time…",
-  "In a world full of ordinary days…",
-  `There was someone extraordinary…`,
-  `Her name was ${HER_NAME} 🌸`,
+  "Close your eyes for a moment…",
+  "Think of someone who makes your heart feel full…",
+  "Someone whose name alone brings a smile…",
+  `That someone is you, ${HER_NAME} 🌸`,
 ];
 
 function OpeningPhase({ onDone }: { onDone: () => void }) {
   const [lineIdx, setLineIdx] = useState(0);
-  const [showKuromi, setShowKuromi] = useState(false);
+  const [showImg, setShowImg] = useState(false);
   const [fading, setFading] = useState(false);
-  const { displayed, done } = useTypewriter(openingLines[lineIdx] ?? "", 55, lineIdx < openingLines.length);
+  const { displayed, done } = useTypewriter(openingLines[lineIdx] ?? "", 52, lineIdx < openingLines.length);
 
   useEffect(() => {
     if (!done) return;
     if (lineIdx === 2) {
-      setTimeout(() => setShowKuromi(true), 400);
-      setTimeout(() => setLineIdx(3), 1200);
+      setTimeout(() => setShowImg(true), 300);
+      setTimeout(() => setLineIdx(3), 1100);
     } else if (lineIdx < openingLines.length - 1) {
-      const t = setTimeout(() => setLineIdx((i) => i + 1), 1800);
+      const t = setTimeout(() => setLineIdx((i) => i + 1), 1900);
       return () => clearTimeout(t);
     } else {
-      const t = setTimeout(() => { setFading(true); setTimeout(onDone, 1200); }, 2400);
+      const t = setTimeout(() => { setFading(true); setTimeout(onDone, 1200); }, 2500);
       return () => clearTimeout(t);
     }
   }, [done, lineIdx, onDone]);
 
   return (
     <div className="bd-phase" style={{ opacity: fading ? 0 : 1, transition: "opacity 1.2s ease" }}>
-      <div className="bd-kuromi-pop" style={{ opacity: showKuromi ? 1 : 0, transform: showKuromi ? "scale(1) translateY(0)" : "scale(0.4) translateY(40px)", transition: "all 0.9s cubic-bezier(0.34,1.56,0.64,1)" }}>
-        <KuromiCharacter size={180} animate />
+      <div
+        className="bd-img-pop"
+        style={{
+          opacity: showImg ? 1 : 0,
+          transform: showImg ? "scale(1) translateY(0)" : "scale(0.3) translateY(50px)",
+          transition: "all 1s cubic-bezier(0.34,1.56,0.64,1)",
+        }}
+      >
+        <KuromiImg idx={0} size={190} animate />
       </div>
       <div className="bd-opening-text-wrap">
         <p className="bd-opening-text" style={{
-          color: lineIdx === openingLines.length - 1 ? "#ff88dd" : "#e8d4ff",
-          fontSize: lineIdx === openingLines.length - 1 ? "2.2rem" : "1.5rem",
+          color: lineIdx === openingLines.length - 1 ? "#ff88dd" : "#ddbfff",
+          fontSize: lineIdx === openingLines.length - 1 ? "2.1rem" : "1.45rem",
         }}>
           {displayed}<span className="bd-cursor">|</span>
         </p>
@@ -311,8 +262,8 @@ function CountdownPhase({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="bd-phase" style={{ opacity: fading ? 0 : 1, transition: "opacity 1.5s ease" }}>
-      <KuromiCharacter size={130} animate />
-      <p className="bd-cd-label">Kuromi counted every second just for you, {HER_NAME}~</p>
+      <KuromiImg idx={1} size={130} animate />
+      <p className="bd-cd-label">Every second of waiting was worth it… because it leads to you.</p>
       <div className="bd-cd-grid">
         {[{ l: "Days", v: tl.days }, { l: "Hours", v: tl.hours }, { l: "Minutes", v: tl.minutes }, { l: "Seconds", v: tl.seconds }].map(({ l, v }) => (
           <div key={l} className="bd-cd-unit">
@@ -321,8 +272,8 @@ function CountdownPhase({ onDone }: { onDone: () => void }) {
           </div>
         ))}
       </div>
-      <p className="bd-cd-sub">Because you deserve to be celebrated every moment~ ♡</p>
-      {tl.done && <p className="bd-cd-now">The moment is here! ✨</p>}
+      <p className="bd-cd-sub">Until the day the world gets to celebrate the most beautiful person in it 💜</p>
+      {tl.done && <p className="bd-cd-now">The moment is finally here ✨</p>}
     </div>
   );
 }
@@ -333,20 +284,20 @@ function FreezePhase({ onDone }: { onDone: () => void }) {
   const [show, setShow] = useState(false);
   const [fading, setFading] = useState(false);
   useEffect(() => {
-    setTimeout(() => setSparkles(true), 600);
-    setTimeout(() => setShow(true), 1000);
-    setTimeout(() => { setFading(true); setTimeout(onDone, 900); }, 3200);
+    setTimeout(() => setSparkles(true), 500);
+    setTimeout(() => setShow(true), 900);
+    setTimeout(() => { setFading(true); setTimeout(onDone, 900); }, 3400);
   }, [onDone]);
   return (
     <div className="bd-phase bd-freeze-purple" style={{ opacity: fading ? 0 : 1, transition: "opacity 0.9s ease" }}>
       {sparkles && (
         <div className="bd-sparkle-burst">
-          {Array.from({ length: 16 }).map((_, i) => (
-            <div key={i} className="bd-sparkle-ray" style={{ transform: `rotate(${i * 22.5}deg)`, animationDelay: `${i * 0.04}s` }} />
+          {Array.from({ length: 18 }).map((_, i) => (
+            <div key={i} className="bd-sparkle-ray" style={{ transform: `rotate(${i * 20}deg)`, animationDelay: `${i * 0.03}s` }} />
           ))}
         </div>
       )}
-      {show && <p className="bd-freeze-text">✨ Time to celebrate, {HER_NAME}! ✨</p>}
+      {show && <p className="bd-freeze-text">✨ Today is all about you, {HER_NAME}… ✨</p>}
     </div>
   );
 }
@@ -355,19 +306,19 @@ function FreezePhase({ onDone }: { onDone: () => void }) {
 function RevealPhase({ onDone }: { onDone: () => void }) {
   const [step, setStep] = useState(0);
   useEffect(() => {
-    const ts = [setTimeout(() => setStep(1), 500), setTimeout(() => setStep(2), 2200), setTimeout(onDone, 7500)];
+    const ts = [setTimeout(() => setStep(1), 400), setTimeout(() => setStep(2), 2000), setTimeout(onDone, 7500)];
     return () => ts.forEach(clearTimeout);
   }, [onDone]);
   return (
     <div className="bd-phase">
       <div style={{ opacity: step >= 1 ? 1 : 0, transform: step >= 1 ? "scale(1)" : "scale(0.4)", transition: "all 1s cubic-bezier(0.34,1.56,0.64,1)" }}>
-        <KuromiCharacter size={160} animate />
+        <KuromiImg idx={2} size={170} animate />
         <h1 className="bd-birthday-title">HAPPY BIRTHDAY!</h1>
         <h1 className="bd-birthday-sub">{HER_NAME} 🎀</h1>
       </div>
       <div className="bd-reveal-lines" style={{ opacity: step >= 2 ? 1 : 0, transform: step >= 2 ? "translateY(0)" : "translateY(30px)", transition: "all 1s ease 0.4s" }}>
-        <p className="bd-reveal-line">Today the whole world shines a little brighter…</p>
-        <p className="bd-reveal-line bd-purple">Because YOU are in it~ 💜</p>
+        <p className="bd-reveal-line">The day you were born, something in the world shifted —</p>
+        <p className="bd-reveal-line bd-purple">it became warmer, brighter, and infinitely more beautiful. 💜</p>
       </div>
       {step >= 2 && <button className="bd-btn bd-btn-outline" onClick={onDone}>Continue ♡</button>}
     </div>
@@ -376,34 +327,39 @@ function RevealPhase({ onDone }: { onDone: () => void }) {
 
 // ─── Love Letter Phase ────────────────────────────────────────────────────────
 const letterLines = [
-  `Dear ${HER_NAME}…`,
-  "You make every ordinary day feel magical.",
-  "Your smile is my favourite thing in the whole world.",
-  "I hope today is as wonderful as you are.",
-  "I love you more than Kuromi loves mischief~ 💜",
+  `My dearest ${HER_NAME},`,
+  "You are the kind of person that poets write about and painters dream of.",
+  "Your laugh is the most beautiful sound I have ever heard.",
+  "When you walk into a room, everything else fades away.",
+  "Loving you is the easiest and most wonderful thing I have ever done.",
+  "Today and every day — I am so grateful you exist. ♡",
 ];
 
 function LoveLetterPhase({ onDone }: { onDone: () => void }) {
   const [idx, setIdx] = useState(0);
   const [shown, setShown] = useState<string[]>([]);
-  const { displayed, done } = useTypewriter(letterLines[idx] ?? "", 40, idx < letterLines.length);
+  const { displayed, done } = useTypewriter(letterLines[idx] ?? "", 38, idx < letterLines.length);
 
   useEffect(() => {
     if (!done) return;
     const t = setTimeout(() => {
       setShown((p) => [...p, letterLines[idx]!]);
       if (idx < letterLines.length - 1) setIdx((i) => i + 1);
-    }, 900);
+    }, 850);
     return () => clearTimeout(t);
   }, [done, idx]);
 
   const finished = idx >= letterLines.length - 1 && done && shown.length === letterLines.length;
   return (
     <div className="bd-phase">
-      <KuromiCharacter size={100} animate />
+      <KuromiImg idx={0} size={100} animate />
       <div className="bd-letter-card">
         <div className="bd-letter-inner">
-          {shown.map((line, i) => <p key={i} className="bd-letter-line" style={{ color: i === 0 ? "#cc88ff" : "#e8d4ff" }}>{line}</p>)}
+          {shown.map((line, i) => (
+            <p key={i} className="bd-letter-line" style={{ color: i === 0 ? "#cc88ff" : i === shown.length - 1 && shown.length === letterLines.length ? "#ff88dd" : "#e8d4ff" }}>
+              {line}
+            </p>
+          ))}
           {idx < letterLines.length && (
             <p className="bd-letter-line">{displayed}<span className="bd-cursor">|</span></p>
           )}
@@ -416,11 +372,11 @@ function LoveLetterPhase({ onDone }: { onDone: () => void }) {
 
 // ─── Interactive Phase ────────────────────────────────────────────────────────
 const memories = [
-  { label: "The first time you smiled at me 🌸", msg: "That smile changed everything…" },
-  { label: "Your laugh 🌟", msg: "Your laugh is the best sound in the universe." },
-  { label: "Every hug 🤗", msg: "I never want to let go." },
-  { label: "Late night chats 🌙", msg: "I would stay up forever just to talk to you." },
-  { label: "Our future 🦋", msg: "I can't wait to make more memories with you." },
+  { label: "The first time I saw you 🌸", msg: "Everything around me went quiet. There was only you." },
+  { label: "The sound of your voice 🎶", msg: "I could listen to you talk forever and still want more." },
+  { label: "When you smile 🌟", msg: "Your smile is my safe place — it makes everything okay." },
+  { label: "Every moment with you 🤍", msg: "I collect them all like the rarest treasures." },
+  { label: "Our future 🦋", msg: "I dream of it every night and it always has you in it." },
 ];
 
 function InteractivePhase({ onDone }: { onDone: () => void }) {
@@ -434,13 +390,14 @@ function InteractivePhase({ onDone }: { onDone: () => void }) {
       <h2 className="bd-section-title">Gifts for {HER_NAME} 🎀</h2>
       <div className="bd-gift-grid">
         <div className="bd-gift-card">
-          <div className="bd-gift-card-title">A Special Gift 🎁</div>
+          <KuromiImg idx={1} size={80} />
+          <div className="bd-gift-card-title">A Gift from My Heart 🎁</div>
           {!giftOpen
             ? <button className="bd-btn bd-btn-primary" onClick={() => setGiftOpen(true)}>🎁 Open me!</button>
-            : <p className="bd-gift-msg bd-fade-in">"You are the greatest gift life ever gave me. Happy Birthday, {HER_NAME}~ 💜"</p>}
+            : <p className="bd-gift-msg bd-fade-in">"You are not just the love of my life — you are the reason I believe in love at all. Happy Birthday, {HER_NAME}. 💜"</p>}
         </div>
         <div className="bd-gift-card">
-          <div className="bd-gift-card-title">Our Memories 🌸</div>
+          <div className="bd-gift-card-title">My Favourite Moments 🌸</div>
           <div className="bd-memory-box">
             <p className="bd-memory-label">{memories[memIdx]!.label}</p>
             <p className="bd-memory-msg">{memories[memIdx]!.msg}</p>
@@ -454,42 +411,46 @@ function InteractivePhase({ onDone }: { onDone: () => void }) {
           </div>
         </div>
         <div className="bd-gift-card bd-love-card">
-          <div className="bd-gift-card-title">Do you love me? 💜</div>
+          <div className="bd-gift-card-title">A Question for You 💜</div>
+          <p className="bd-love-question">Do you know how much I love you?</p>
           {love === null ? (
             <div className="bd-love-btns">
-              <button className="bd-btn bd-btn-primary bd-love-yes" onClick={() => setLove("yes")}>YES 💜</button>
+              <button className="bd-btn bd-btn-primary bd-love-yes" onClick={() => setLove("yes")}>Yes 💜</button>
               <button
                 className="bd-love-no"
                 style={{ transform: `translate(${noPos.x}px,${noPos.y}px)` }}
                 onMouseEnter={() => setNoPos({ x: (Math.random() - 0.5) * 280, y: (Math.random() - 0.5) * 180 })}
                 onClick={() => setLove("no")}
-              >no...</button>
+              >Not really…</button>
             </div>
           ) : (
             <p className="bd-love-answer bd-fade-in">
-              {love === "yes" ? `I knew it! I love you so much, ${HER_NAME}~ 💜` : "Kuromi says you can't escape the love! 🖤💜"}
+              {love === "yes"
+                ? `Then you already know you are my whole world, ${HER_NAME}. 💜`
+                : `Then let me spend every day showing you just how infinite it is. ♾️💜`}
             </p>
           )}
         </div>
       </div>
-      <button className="bd-btn bd-btn-outline" onClick={onDone}>The Wish Dial awaits ✨</button>
+      <button className="bd-btn bd-btn-outline" onClick={onDone}>One more surprise ✨</button>
     </div>
   );
 }
 
 // ─── Dial Phase ───────────────────────────────────────────────────────────────
 const dialMsgs = [
-  { type: "wish",      text: "I wish you endless happiness, always~ 🌸" },
-  { type: "compliment", text: "You are the most beautiful soul I've ever known 💜" },
-  { type: "promise",   text: "I promise to always be by your side 🤝" },
-  { type: "wish",      text: "May every dream you have come true ✨" },
-  { type: "compliment", text: "Your kindness lights up every room 🌟" },
-  { type: "promise",   text: "I will choose you, in every universe 🌙" },
-  { type: "wish",      text: "I wish you a year full of magic and love 🎀" },
-  { type: "compliment", text: "You are everything and more, {HER_NAME} 💖" },
+  { type: "feeling",  text: "You make me feel things I never had words for before." },
+  { type: "promise",  text: "I promise to love you on your hardest days, not just your best." },
+  { type: "truth",    text: "You are the most breathtaking person I have ever known." },
+  { type: "feeling",  text: "Every time you look at me, my heart forgets how to be calm." },
+  { type: "promise",  text: "I will be your safe place, always — no matter what." },
+  { type: "truth",    text: "Knowing you is the greatest gift life has ever given me." },
+  { type: "feeling",  text: "With you, even ordinary moments feel like magic." },
+  { type: "promise",  text: "I choose you. Today, tomorrow, and every day after." },
 ];
 
-const typeColor: Record<string, string> = { wish: "#ff88dd", compliment: "#cc88ff", promise: "#88aaff" };
+const typeColor: Record<string, string> = { feeling: "#ff88dd", promise: "#cc88ff", truth: "#88aaff" };
+const typeLabel: Record<string, string> = { feeling: "✦ How I feel", promise: "✦ My promise", truth: "✦ The truth" };
 
 function DialPhase({ onDone }: { onDone: () => void }) {
   const [angle, setAngle] = useState(0);
@@ -518,8 +479,9 @@ function DialPhase({ onDone }: { onDone: () => void }) {
   const msg = dialMsgs[msgIdx]!;
   return (
     <div className="bd-phase">
-      <h2 className="bd-section-title">Kuromi's Wish Dial 🌙</h2>
-      <p className="bd-dial-hint">Drag the dial to reveal wishes for {HER_NAME}~</p>
+      <KuromiImg idx={2} size={110} animate />
+      <h2 className="bd-section-title">A Dial of Feelings 🌙</h2>
+      <p className="bd-dial-hint">Drag the dial to hear what my heart has to say…</p>
       <div ref={dialRef} className="bd-dial" onMouseDown={onStart} onMouseMove={onMove} onMouseUp={onEnd} onMouseLeave={onEnd} onTouchStart={onStart} onTouchMove={onMove} onTouchEnd={onEnd}>
         <div className="bd-dial-inner" style={{ transform: `rotate(${angle}deg)` }}>
           {Array.from({ length: 12 }).map((_, i) => {
@@ -531,48 +493,47 @@ function DialPhase({ onDone }: { onDone: () => void }) {
         <div className="bd-dial-pointer" />
       </div>
       <div className="bd-dial-msg">
-        <div className="bd-dial-type" style={{ color: typeColor[msg.type] }}>
-          {msg.type === "wish" ? "✦ Wish" : msg.type === "compliment" ? "✦ Compliment" : "✦ Promise"}
-        </div>
-        <p className="bd-dial-text">{msg.text.replace("{HER_NAME}", HER_NAME)}</p>
+        <div className="bd-dial-type" style={{ color: typeColor[msg.type] }}>{typeLabel[msg.type]}</div>
+        <p className="bd-dial-text">{msg.text}</p>
       </div>
-      <button className="bd-btn bd-btn-outline" onClick={onDone}>The grand finale ✨</button>
+      <button className="bd-btn bd-btn-outline" onClick={onDone}>The final moment ✨</button>
     </div>
   );
 }
 
 // ─── Finale Phase ─────────────────────────────────────────────────────────────
 const finaleLines = [
-  "In every world…",
-  "In every story…",
-  `You are my favourite chapter, ${HER_NAME}…`,
+  "Of all the lives I could have lived…",
+  "Of all the people I could have met…",
+  `I am the luckiest, because I got you, ${HER_NAME}.`,
   "",
-  `Happy Birthday 💜🎀`,
+  "Happy Birthday, my love. 💜🎀",
 ];
 
 function FinalePhase() {
   const [step, setStep] = useState(0);
-  useEffect(() => { finaleLines.forEach((_, i) => setTimeout(() => setStep(i + 1), i * 2000 + 600)); }, []);
+  useEffect(() => { finaleLines.forEach((_, i) => setTimeout(() => setStep(i + 1), i * 2000 + 500)); }, []);
   return (
     <div className="bd-phase">
-      <KuromiCharacter size={170} animate />
+      <KuromiImg idx={0} size={180} animate />
       <div className="bd-finale-lines">
         {finaleLines.map((line, i) => (
           <p key={i} className="bd-finale-line" style={{
             opacity: step > i ? 1 : 0,
             transform: step > i ? "translateY(0)" : "translateY(20px)",
-            transition: "all 1.4s ease",
+            transition: "all 1.5s ease",
             color: i === 4 ? "#ff88dd" : "#e8d4ff",
-            fontSize: i === 4 ? "2.4rem" : i === 2 ? "1.4rem" : "1.5rem",
-            fontWeight: i === 4 ? 700 : 300,
+            fontSize: i === 4 ? "2.3rem" : i === 2 ? "1.35rem" : "1.5rem",
+            fontWeight: i === 4 ? 700 : i === 2 ? 600 : 300,
+            fontStyle: i === 4 ? "normal" : "italic",
             marginBottom: i === 3 ? "1rem" : "0.3rem",
           }}>{line}</p>
         ))}
       </div>
       {step > 4 && (
         <div className="bd-finale-emojis">
-          {["💜","🎀","🌸","✨","💖","⭐","🦋"].map((e, i) => (
-            <span key={i} className="bd-finale-emoji" style={{ animationDelay: `${i * 0.18}s` }}>{e}</span>
+          {["💜","🎀","🌸","✨","💖","⭐","🦋","🌙"].map((e, i) => (
+            <span key={i} className="bd-finale-emoji" style={{ animationDelay: `${i * 0.16}s` }}>{e}</span>
           ))}
         </div>
       )}
@@ -582,7 +543,7 @@ function FinalePhase() {
 
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 const PHASES: Phase[] = ["opening","countdown","freeze","reveal","letter","interactive","dial","finale"];
-const LABELS: Record<Phase, string> = { opening:"Opening", countdown:"Countdown", freeze:"Sparkle", reveal:"Birthday", letter:"Love Letter", interactive:"Gifts", dial:"Wish Dial", finale:"Finale" };
+const LABELS: Record<Phase, string> = { opening:"Opening", countdown:"Countdown", freeze:"Sparkle", reveal:"Birthday", letter:"Love Letter", interactive:"Gifts", dial:"Feelings Dial", finale:"Finale" };
 
 function NavBar({ current, onJump }: { current: Phase; onJump: (p: Phase) => void }) {
   const [open, setOpen] = useState(false);
@@ -617,9 +578,13 @@ function EasterEgg() {
   return (
     <div className="bd-easter-overlay">
       <div className="bd-easter-box">
-        <KuromiCharacter size={120} animate />
-        <p className="bd-easter-title">Secret Unlocked~ 🖤💜</p>
-        <p className="bd-easter-msg">"{HER_NAME}, you found the secret message! You are magic, and I love you more than words can say~ 💜"</p>
+        <KuromiImg idx={1} size={130} animate />
+        <p className="bd-easter-title">You found the secret 🌸</p>
+        <p className="bd-easter-msg">
+          "{HER_NAME}, if I searched every corner of this world and every page of every story ever written,
+          I still would not find words beautiful enough to describe what you mean to me.
+          So I will just say this — I love you. Completely, endlessly, always. 💜"
+        </p>
         <button className="bd-btn bd-btn-outline" onClick={() => setFound(false)}>Close ✕</button>
       </div>
     </div>
