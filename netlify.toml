@@ -1,0 +1,7 @@
+[build]
+  base = "artifacts/birthday-kurumi"
+  command = "npm i -g pnpm && pnpm install && pnpm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
