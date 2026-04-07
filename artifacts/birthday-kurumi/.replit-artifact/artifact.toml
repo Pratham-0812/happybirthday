@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Kurumi Birthday Experience"
+version = "1.0.0"
+id = "artifacts/birthday-kurumi"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20549
+
+[services.development]
+run = "pnpm --filter @workspace/birthday-kurumi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/birthday-kurumi", "run", "build" ]
+publicDir = "artifacts/birthday-kurumi/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20549"
+BASE_PATH = "/"
